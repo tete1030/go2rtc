@@ -108,6 +108,9 @@ func NewServerAPI(network, address string, filters *Filters) (*webrtc.API, error
 	}
 
 	s := webrtc.SettingEngine{}
+	// Allow late NACK repairs beyond Pion's default 64-packet replay window.
+	// Keep replay protection enabled and cover the 512-packet NACK history.
+	s.SetSRTPReplayProtectionWindow(1024)
 
 	// fix https://github.com/pion/webrtc/pull/2407
 	s.SetDTLSInsecureSkipHelloVerify(true)
